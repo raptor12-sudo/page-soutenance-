@@ -591,6 +591,68 @@
     }
     .reveal { opacity: 1; transform: none; }
   }
+
+  /* ============================================================
+     JOUR J — HUB (photos / mémoire / contact)
+     ============================================================ */
+  .section-head { text-align: center; margin-bottom: 24px; }
+  .section-head h2 {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: -0.01em;
+    color: var(--black);
+  }
+  .hub-intro {
+    text-align: center; color: var(--gray-600); font-weight: 300;
+    max-width: 520px; margin: 0 auto 26px;
+  }
+  .big-actions {
+    display: flex; gap: 14px; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .big-actions .btn { width: auto; min-width: 220px; }
+
+  .upload-zone {
+    border: 1.5px dashed var(--gray-200); border-radius: 16px;
+    padding: 30px 20px; text-align: center;
+    transition: border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .upload-zone:hover { border-color: var(--gold); background: var(--gold-soft); }
+
+  .gallery-empty {
+    grid-column: 1 / -1; text-align: center; color: var(--gray-500);
+    padding: 40px 14px; border: 1px dashed var(--gray-200); border-radius: 14px;
+    font-weight: 300;
+  }
+
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .res-card {
+    border: 1px solid var(--gray-200); border-radius: 14px; padding: 26px 22px;
+    display: flex; flex-direction: column; gap: 6px; text-decoration: none;
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+  }
+  .res-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold); }
+  .res-card .ico { font-size: 1.6rem; }
+  .res-card .t { font-weight: 600; color: var(--black); }
+  .res-card .d { font-size: .9rem; color: var(--gray-600); font-weight: 300; }
+
+  .contact-list { display: flex; flex-direction: column; gap: 10px; max-width: 460px; margin: 0 auto; }
+  .contact-row {
+    display: flex; align-items: center; gap: 14px; padding: 13px 18px;
+    border: 1px solid var(--gray-200); border-radius: 12px;
+    text-decoration: none; color: var(--black);
+    transition: border-color .25s var(--ease), transform .25s var(--ease);
+  }
+  .contact-row:hover { border-color: var(--gold); transform: translateX(3px); }
+  .contact-row .ci { font-size: 1.2rem; width: 26px; text-align: center; }
+  .contact-row .ck { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gray-500); }
+  .contact-row .cv { font-weight: 500; word-break: break-word; }
+
+  @media (max-width: 600px) {
+    .res-grid { grid-template-columns: 1fr; }
+    .big-actions .btn { width: 100%; }
+  }
 </style>
 </head>
 <body>
@@ -629,62 +691,81 @@
     <div class="reveal">
       <p class="label">Sujet du mémoire</p>
       <h2 class="project__title">
-        Conception et déploiement d'une infrastructure réseau sécurisée et
-        évolutive pour environnements multi-sites.
+        Conception et déploiement d'une infrastructure réseau d'entreprise
+        sécurisée, virtualisée et segmentée&nbsp;: cas du Made&nbsp;in&nbsp;Sénégal Center.
       </h2>
     </div>
   </section>
 
-  <!-- ============ INFOS GRILLE ============ -->
-  <section class="wrap">
-    <div class="info-grid reveal">
-      <div class="info-card">
-        <div class="k">Année</div>
-        <div class="v">2026</div>
+  <!-- ============ PHOTOS DU JOUR ============ -->
+  <section class="wrap" id="photos">
+    <div class="reveal">
+      <div class="section-head">
+        <p class="label" style="text-align:center">Photos du jour</p>
+        <h2>Partagez &amp; récupérez les photos</h2>
       </div>
-      <div class="info-card">
-        <div class="k">Parcours</div>
-        <div class="v">SRT</div>
+      <p class="hub-intro">
+        Vous avez pris des photos aujourd'hui&nbsp;? Ajoutez-les à l'album commun.
+        Vous pouvez aussi récupérer toutes les photos en pleine qualité.
+      </p>
+
+      <div class="big-actions">
+        <a class="btn btn-primary" id="albumAdd" target="_blank" rel="noopener">📤 Ajouter mes photos</a>
+        <a class="btn btn-ghost" id="albumGet" target="_blank" rel="noopener">📥 Récupérer les photos</a>
+      </div>
+
+      <!-- Dépôt direct sur la page (visible seulement si Cloudinary est configuré) -->
+      <div class="upload-zone" id="uploadZone" style="display:none">
+        <p style="font-weight:600;margin-bottom:6px">Déposer directement ici</p>
+        <p style="color:var(--gray-600);font-weight:300;font-size:.9rem;margin-bottom:16px">
+          Vos photos s'ajoutent à la galerie ci-dessous.
+        </p>
+        <button class="btn btn-secondary" id="uploadBtn" type="button" style="max-width:260px;margin:0 auto">
+          📷 Choisir des photos
+        </button>
+      </div>
+
+      <div class="gallery-grid" id="gallery" style="margin-top:26px"></div>
+    </div>
+  </section>
+
+  <!-- (anciens boutons déplacés vers les sections Mémoire & Contact) -->
+
+  <!-- ============ MÉMOIRE ============ -->
+  <section class="wrap" id="memoire">
+    <div class="reveal">
+      <div class="section-head">
+        <p class="label" style="text-align:center">Le travail</p>
+        <h2>Consulter le mémoire</h2>
+      </div>
+      <div class="res-grid">
+        <a class="res-card" id="thesisLink" target="_blank" rel="noopener">
+          <div class="ico">📄</div>
+          <div class="t">Mémoire complet (PDF)</div>
+          <div class="d">Conception et déploiement d'une infrastructure réseau sécurisée — cas du MISEN Center.</div>
+        </a>
+        <a class="res-card" id="projectsLink" target="_blank" rel="noopener">
+          <div class="ico">💻</div>
+          <div class="t">Mes projets</div>
+          <div class="d">Dépôts et réalisations techniques.</div>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- ============ CTA ============ -->
-  <section class="wrap cta">
+  <!-- ============ RENSEIGNEMENTS / CONTACT ============ -->
+  <section class="wrap" id="contact">
     <div class="reveal">
-      <h2>Accès aux documents</h2>
-      <p>Consultez le mémoire, les projets et le parcours professionnel.</p>
-      <div class="btn-row">
-        <a
-          class="btn btn-primary"
-          href="https://drive.google.com/drive/folders/19CMNRmaEFobdQRUHa_1twQCyU4dnFtY2"
-          target="_blank"
-          rel="noopener"
-        >Voir les documents</a>
-        <a
-          class="btn btn-secondary"
-          href="https://github.com/raptor12-sudo"
-          target="_blank"
-          rel="noopener"
-        >💻 Mes projets</a>
-        <a
-          class="btn btn-ghost"
-          href="https://linkedin.com/in/tidiane-sow"
-          target="_blank"
-          rel="noopener"
-        >🔗 LinkedIn</a>
+      <div class="section-head">
+        <p class="label" style="text-align:center">Restons en contact</p>
+        <h2>Mes coordonnées</h2>
       </div>
-    </div>
-  </section>
-
-  <!-- ============ GALERIE ============ -->
-  <section class="wrap">
-    <div class="reveal">
-      <p class="label" style="text-align:center">Galerie</p>
-      <h2 class="cta" style="font-family:'IBM Plex Sans';font-weight:600;font-size:clamp(1.5rem,4vw,2rem);">
-        Photos du jour
-      </h2>
-      <div class="gallery-grid" id="gallery"></div>
+      <div class="contact-list" id="contactList"></div>
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn btn-primary" id="vcardBtn" type="button" style="max-width:300px">
+          ➕ Enregistrer mon contact
+        </button>
+      </div>
     </div>
   </section>
 
@@ -766,31 +847,147 @@
 })();
 
 /* ============================================================
-   GALLERY DATA + LAZY THUMBS
+   CONFIG — MODIFIE UNIQUEMENT CE BLOC
    ============================================================ */
-const PHOTOS = [
-  { src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1400&q=80", t: "Cérémonie de remise des diplômes" },
-  { src: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1400&q=80", t: "Amphithéâtre de soutenance" },
-  { src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1400&q=80", t: "Présentation devant le jury" },
-  { src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1400&q=80", t: "Travail de recherche" },
-  { src: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1400&q=80", t: "Équipement réseau" },
-  { src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1400&q=80", t: "Moments partagés" },
-];
+const CONFIG = {
+  // Lien de l'album partagé (Google Photos conseillé). Vide = boutons masqués.
+  albumUrl: "",
+  // Mémoire (PDF ou dossier Drive)
+  thesisUrl: "https://drive.google.com/drive/folders/19CMNRmaEFobdQRUHa_1twQCyU4dnFtY2",
+  projectsUrl: "https://github.com/raptor12-sudo",
+  // Coordonnées (laisse vide pour masquer une ligne)
+  contact: {
+    name: "Tidiane SOW",
+    role: "Master Systèmes, Réseaux & Télécommunications — ESP-UCAD",
+    email: "",                                   // ← ton email
+    phone: "",                                   // ← optionnel : +221 …
+    linkedin: "https://linkedin.com/in/tidiane-sow",
+    github: "https://github.com/raptor12-sudo"
+  },
+  // Dépôt de photos SUR la page (optionnel). Laisse cloudName vide pour désactiver.
+  cloudinary: { cloudName: "", uploadPreset: "", tag: "soutenance_tidiane" }
+};
 
-(function buildGallery() {
+let PHOTOS = [];  // galerie dynamique, lue par la lightbox
+
+/* -- Câblage des liens (album / mémoire / projets) -- */
+(function wireLinks() {
+  const add = document.getElementById("albumAdd");
+  const get = document.getElementById("albumGet");
+  if (CONFIG.albumUrl) { add.href = CONFIG.albumUrl; get.href = CONFIG.albumUrl; }
+  else { add.style.display = "none"; get.style.display = "none"; }
+  const th = document.getElementById("thesisLink"); if (th) th.href = CONFIG.thesisUrl;
+  const pr = document.getElementById("projectsLink"); if (pr) pr.href = CONFIG.projectsUrl;
+})();
+
+/* -- Galerie : ajout dynamique de photos -- */
+(function gallery() {
   const grid = document.getElementById("gallery");
-  PHOTOS.forEach((p, i) => {
+  function showEmpty() {
+    grid.innerHTML = '<div class="gallery-empty">Les photos apparaîtront ici' +
+      (CONFIG.albumUrl
+        ? ' — ou dans <a href="' + CONFIG.albumUrl + '" target="_blank" rel="noopener" style="color:var(--gold)">l\'album partagé</a>.'
+        : '.') + '</div>';
+  }
+  window.addPhoto = function (p) {
+    if (!PHOTOS.length) grid.innerHTML = "";   // retire le placeholder
+    PHOTOS.push(p);
+    const i = PHOTOS.length - 1;
     const fig = document.createElement("div");
     fig.className = "thumb";
-    fig.dataset.index = i;
     const img = document.createElement("img");
-    img.loading = "lazy";
-    img.decoding = "async";
-    img.src = p.src;
-    img.alt = p.t;
+    img.loading = "lazy"; img.decoding = "async";
+    img.src = p.src; img.alt = p.t || "Photo de la soutenance";
     fig.appendChild(img);
-    fig.addEventListener("click", () => openLightbox(i));
+    fig.addEventListener("click", () => window.openLightbox(i));
     grid.appendChild(fig);
+  };
+  showEmpty();
+
+  // Préchargement des photos déjà déposées (si Cloudinary configuré)
+  const cl = CONFIG.cloudinary;
+  if (cl.cloudName && cl.tag) {
+    fetch("https://res.cloudinary.com/" + cl.cloudName + "/image/list/" + cl.tag + ".json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d && d.resources) {
+          d.resources
+            .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
+            .forEach((r) => window.addPhoto({
+              src: "https://res.cloudinary.com/" + cl.cloudName +
+                   "/image/upload/c_fill,w_1400,q_auto/" + r.public_id + "." + r.format,
+              t: "Photo de la soutenance"
+            }));
+        }
+      })
+      .catch(() => {});
+  }
+})();
+
+/* -- Dépôt de photos sur la page via Cloudinary (optionnel) -- */
+(function uploader() {
+  const cl = CONFIG.cloudinary;
+  if (!cl.cloudName || !cl.uploadPreset) return;   // désactivé
+  const zone = document.getElementById("uploadZone");
+  const btn = document.getElementById("uploadBtn");
+  zone.style.display = "block";
+  const s = document.createElement("script");
+  s.src = "https://upload-widget.cloudinary.com/global/all.js";
+  s.onload = function () {
+    const widget = cloudinary.createUploadWidget(
+      {
+        cloudName: cl.cloudName, uploadPreset: cl.uploadPreset, tags: [cl.tag],
+        sources: ["local", "camera"], multiple: true, maxFiles: 20, language: "fr"
+      },
+      function (err, res) {
+        if (!err && res && res.event === "success") {
+          window.addPhoto({ src: res.info.secure_url, t: "Photo de la soutenance" });
+        }
+      }
+    );
+    btn.addEventListener("click", () => widget.open());
+  };
+  document.head.appendChild(s);
+})();
+
+/* -- Contact + génération vCard (.vcf) -- */
+(function contact() {
+  const c = CONFIG.contact;
+  const list = document.getElementById("contactList");
+  const rows = [];
+  if (c.email) rows.push(["✉️", "Email", c.email, "mailto:" + c.email]);
+  if (c.phone) rows.push(["📞", "Téléphone", c.phone, "tel:" + c.phone.replace(/\s/g, "")]);
+  if (c.linkedin) rows.push(["🔗", "LinkedIn", c.linkedin.replace(/^https?:\/\//, ""), c.linkedin]);
+  if (c.github) rows.push(["💻", "GitHub", c.github.replace(/^https?:\/\//, ""), c.github]);
+  list.innerHTML = rows.map(function (r) {
+    return '<a class="contact-row" href="' + r[3] + '" target="_blank" rel="noopener">' +
+      '<span class="ci">' + r[0] + '</span><span><span class="ck">' + r[1] +
+      '</span><br><span class="cv">' + r[2] + '</span></span></a>';
+  }).join("");
+
+  const parts = c.name.trim().split(/\s+/);
+  const last = parts.length > 1 ? parts[parts.length - 1] : "";
+  const first = parts.length > 1 ? parts.slice(0, -1).join(" ") : c.name;
+  function vcard() {
+    return [
+      "BEGIN:VCARD", "VERSION:3.0",
+      "N:" + last + ";" + first + ";;;", "FN:" + c.name,
+      c.role ? "TITLE:" + c.role : "",
+      c.email ? "EMAIL;TYPE=INTERNET:" + c.email : "",
+      c.phone ? "TEL;TYPE=CELL:" + c.phone : "",
+      c.linkedin ? "URL:" + c.linkedin : "",
+      c.github ? "URL:" + c.github : "",
+      "END:VCARD"
+    ].filter(Boolean).join("\r\n");
+  }
+  const vb = document.getElementById("vcardBtn");
+  if (vb) vb.addEventListener("click", function () {
+    const blob = new Blob([vcard()], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "tidiane-sow.vcf";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 })();
 
