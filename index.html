@@ -716,9 +716,9 @@
 
       <!-- Dépôt direct sur la page (visible seulement si Cloudinary est configuré) -->
       <div class="upload-zone" id="uploadZone" style="display:none">
-        <p style="font-weight:600;margin-bottom:6px">Déposer directement ici</p>
+        <p style="font-weight:600;margin-bottom:6px">Ajoutez vos photos — sans application ni compte</p>
         <p style="color:var(--gray-600);font-weight:300;font-size:.9rem;margin-bottom:16px">
-          Vos photos s'ajoutent à la galerie ci-dessous.
+          Choisissez une photo ou prenez-en une&nbsp;: elle s'ajoute à la galerie ci-dessous.
         </p>
         <button class="btn btn-secondary" id="uploadBtn" type="button" style="max-width:260px;margin:0 auto">
           📷 Choisir des photos
@@ -865,7 +865,7 @@ const CONFIG = {
     github: "https://github.com/raptor12-sudo"
   },
   // Dépôt de photos SUR la page (optionnel). Laisse cloudName vide pour désactiver.
-  cloudinary: { cloudName: "", uploadPreset: "", tag: "soutenance_tidiane" }
+  cloudinary: { cloudName: "wggiklk6", uploadPreset: "soutenance", tag: "soutenance" }
 };
 
 let PHOTOS = [];  // galerie dynamique, lue par la lightbox
@@ -931,6 +931,8 @@ let PHOTOS = [];  // galerie dynamique, lue par la lightbox
   const zone = document.getElementById("uploadZone");
   const btn = document.getElementById("uploadBtn");
   zone.style.display = "block";
+  const addBtn = document.getElementById("albumAdd");
+  if (addBtn) addBtn.style.display = "none";   // l'ajout se fait directement sur la page
   const s = document.createElement("script");
   s.src = "https://upload-widget.cloudinary.com/global/all.js";
   s.onload = function () {
